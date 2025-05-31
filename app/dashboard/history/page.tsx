@@ -5,9 +5,28 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import DashboardLayout from "@/components/dashboard-layout"
+import { auth } from "@clerk/nextjs/server"
+import { redirect } from "next/navigation"
+
+// Force dynamic rendering - don't prerender this page
+export const dynamic = "force-dynamic"
 
 export default async function HistoryPage() {
-  const documents = await getUserDocuments()
+  // Check authentication first
+  const { userId } = auth()
+
+  if (!userId) {
+    redirect("/sign-in")
+  }
+
+  let documents = []
+
+  try {
+    documents = await getUserDocuments()
+  } catch (error) {
+    console.error("Error fetching documents:", error)
+    // Handle error gracefully - show empty state
+  }
 
   return (
     <DashboardLayout>
