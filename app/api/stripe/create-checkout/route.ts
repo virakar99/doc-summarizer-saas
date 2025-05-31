@@ -16,11 +16,26 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Price ID is required" }, { status: 400 })
     }
 
+    // Check if Stripe is configured
+    if (!process.env.STRIPE_SECRET_KEY) {
+      return NextResponse.json(
+        {
+          error: "Payment processing is not configured. Please contact support.",
+        },
+        { status: 503 },
+      )
+    }
+
     const session = await createCheckoutSession(priceId)
 
     return NextResponse.json({ url: session.url })
   } catch (error) {
     console.error("Error creating checkout session:", error)
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json(
+      {
+        error: error.message || "Failed to create checkout session",
+      },
+      { status: 500 },
+    )
   }
 }

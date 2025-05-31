@@ -5,6 +5,16 @@ import { headers } from "next/headers"
 import type Stripe from "stripe"
 
 export async function POST(req: NextRequest) {
+  // Check if Stripe is configured
+  if (!stripe || !process.env.STRIPE_WEBHOOK_SECRET) {
+    return NextResponse.json(
+      {
+        error: "Stripe webhook is not configured",
+      },
+      { status: 503 },
+    )
+  }
+
   const body = await req.text()
   const signature = headers().get("Stripe-Signature") as string
 

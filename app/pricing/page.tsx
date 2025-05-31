@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Check, CreditCard, Loader2 } from "lucide-react"
+import { Check } from "lucide-react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useUser } from "@clerk/nextjs"
@@ -32,14 +32,14 @@ export default function PricingPage() {
 
       const data = await response.json()
 
-      if (data.url) {
+      if (response.ok && data.url) {
         window.location.href = data.url
       } else {
-        throw new Error("Failed to create checkout session")
+        throw new Error(data.error || "Failed to create checkout session")
       }
     } catch (error) {
       console.error("Error subscribing:", error)
-      alert("Something went wrong. Please try again.")
+      alert(`Error: ${error.message}`)
     } finally {
       setLoading(null)
     }
@@ -103,7 +103,7 @@ export default function PricingPage() {
             </CardContent>
           </Card>
 
-          <Card className="border-indigo-200 shadow-lg">
+          <Card className="border-indigo-200 shadow-lg relative">
             <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
               <span className="bg-indigo-600 text-white px-4 py-1 rounded-full text-sm">Most Popular</span>
             </div>
@@ -133,22 +133,8 @@ export default function PricingPage() {
                   <span>Priority support</span>
                 </li>
               </ul>
-              <Button
-                className="w-full"
-                onClick={() => handleSubscribe("price_pro")}
-                disabled={loading === "price_pro"}
-              >
-                {loading === "price_pro" ? (
-                  <>
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Processing...
-                  </>
-                ) : (
-                  <>
-                    <CreditCard className="h-4 w-4 mr-2" />
-                    Subscribe
-                  </>
-                )}
+              <Button className="w-full" disabled>
+                Coming Soon
               </Button>
             </CardContent>
           </Card>
@@ -184,22 +170,8 @@ export default function PricingPage() {
                   <span>Dedicated support</span>
                 </li>
               </ul>
-              <Button
-                className="w-full"
-                onClick={() => handleSubscribe("price_enterprise")}
-                disabled={loading === "price_enterprise"}
-              >
-                {loading === "price_enterprise" ? (
-                  <>
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Processing...
-                  </>
-                ) : (
-                  <>
-                    <CreditCard className="h-4 w-4 mr-2" />
-                    Subscribe
-                  </>
-                )}
+              <Button className="w-full" disabled>
+                Coming Soon
               </Button>
             </CardContent>
           </Card>
