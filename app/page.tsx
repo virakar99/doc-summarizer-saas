@@ -31,15 +31,12 @@ export default function HomePage() {
             Transform lengthy PDFs, Word documents, and text files into concise, actionable summaries in seconds.
             Perfect for students, professionals, and researchers.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex justify-center">
             <Link href="/dashboard">
               <Button size="lg" className="text-lg px-8 py-3">
                 Start Summarizing Free
               </Button>
             </Link>
-            <Button variant="outline" size="lg" className="text-lg px-8 py-3">
-              Watch Demo
-            </Button>
           </div>
         </div>
       </section>
